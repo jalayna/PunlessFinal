@@ -1,0 +1,213 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Chat About Random Videos</title>
+ 
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+body { font: 13px Helvetica, Arial; }
+
+form {
+	background: #000;
+	padding: 3px;
+	position: fixed;
+	bottom: 0;
+	width: 50%; 
+}
+      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) {background-color: #E0F2F7; }
+    
+          
+#n{
+    width: 100%;
+    height: 60px;
+}
+
+.inputs {
+    height: 50px;
+    padding: 0 10px;
+    background: #000;
+    font-family: 'Montserrat', sans-serif;
+    text-indent: 10px;
+    color: #fff;
+    font-size: 30px;
+    width: 270px;
+	text-align: center;
+	border: none;
+	border-bottom: white 1px solid;
+}
+
+	.inputs:focus {
+		outline: none;
+	}
+
+body {
+	background-color: #fff;
+}
+
+.btn {
+  width: 150px;
+  background:#000;
+  -webkit-border-radius: 3;
+  -moz-border-radius: 3;
+  border-radius: 3px;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 20px;
+  padding: 10px 40px 10px 40px;
+  text-decoration: none;
+  text-align: center;
+  float: right;
+  margin: 10px 0 0 0;
+}
+
+.btn:hover {
+	cursor: pointer;
+}
+
+.lightbox {
+    width:50vw; 
+	height: 35vh;
+    margin:0 auto; 
+    background:#000; 
+    text-align:left; 
+    padding:25px; 
+	margin-top: 25vh;
+}
+
+.lightbox h1 {
+	text-align: center;
+	font-family: 'Montserrat', sans-serif;
+	margin-bottom: 10px;
+	font-size: 40px;
+	color: #fff;
+}
+
+#box {
+	z-index:9999;
+	background-color: black;
+	width: 100%;
+	height: 100%;
+	position:fixed;
+}
+
+.send {
+	background-color: #34A8E0;
+	/*border: 1px solid #C5E417;*/
+	color: #fff;
+	border-radius: 3px;
+	padding: 8px;
+	font-size: 130%;
+}
+
+.chat-box {
+	background-color: #fff;
+	border-radius: 3px;
+	font-size: 130%;
+	padding: 8px;
+	
+}
+
+.chat-box:focus {
+		outline: none;
+	}
+
+.form {
+	background-color: #DDDDDD;
+	padding: 7px;
+}
+
+#messagediv{
+	width:50%;
+	float:right;
+	clear: right;
+}
+
+h2{
+	padding-left: 10px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	font-size:24px;
+	width: 50%;
+	float: right;
+	text-align: center;
+
+}
+
+#videodiv {
+    float: left;
+    clear: left;
+    width: 50%;
+    position: fixed;
+    padding-bottom: 56.25%;
+    padding-top: 25px;
+    height: 0;
+}
+
+#videodiv iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+       </style>
+  </head>
+  <body>
+	<div id="box">  
+		<div class="lightbox">
+			<h1>Pick a Username</h1>
+			<input id="n" class="inputs" placeholder="" name="fullname" onsubmit='validate();' onkeydown="if (event.keyCode == 13) document.getElementById('box').style.display = 'none'"/>
+		</div>
+	</div>  
+	<div id="messagediv">
+		<ul id="messages"></ul>
+		<form action="" class="form">
+		  <input id="m" autocomplete="off" class="chat-box" placeholder="Type here..."/><button class="send">Send</button>
+		</form>
+	</div>
+	<h2>Random Awesome Video Nonsense and Chat with Strangers. What could be more fun?</h2>
+	<div id="videodiv">
+		<iframe id="video" src="" frameborder="0" allowfullscreen></iframe>
+	</div>
+	<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+	
+			function getRandomColor() {
+				var letters = '0123456789ABCDEF'.split('');
+				var color = '#';
+				for (var i = 0; i < 6; i++ ) {
+					color += letters[Math.floor(Math.random() * 16)];
+				}
+				return color;
+			}
+			
+			var socket = io();
+			$('form').submit(function(){
+				socket.emit('chat message',$('#n').val() + ": " + $('#m').val());
+				$('#m').val('');
+				return false;
+			});
+			
+			socket.on('chat message', function(msg){
+				$('#messages').append($('<li id="li">').text(msg));
+				//$('li:last-child').css('background-color', getRandomColor());
+				$("html, body").animate({ scrollTop: $('li:last-child').offset().top + $('li:last-child').outerHeight(true) -$(window).height()}, .1);
+			});       
+	</script>
+    
+      
+	  
+    <script>
+		var video = ['O2hO4_UEe-4', 'TRL7o2kPqw0', 'GUCcObwIsOs', 'uVRrgBecaeU', 'fTTGALaRZoc'];
+		var random_video = video[Math.floor(Math.random() * video.length)];
+		$('#video').attr( "src", "https://www.youtube.com/embed/" + random_video + "?rel=0&amp;showinfo=0");
+	</script>
+  </body>
+</html>
